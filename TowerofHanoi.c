@@ -7,21 +7,24 @@
 #include <stdlib.h>
 
 int instruction_count=0;
-int numberOfDisc= 3;
-void printTowers(int * t1, int * t2, int * t3, int n);
-void moveDisc(int n, int * from, int * to, int * intermediate, int * pFrom, int * pTo, int * pInter, int * copia, int * t1, int * t2, int * t3); 
+int numberOfDisc= 6;
+int x = 0;
+int *t1;
+int *t2;
+int *t3;
+int * pTo;
+int * pFrom;
+int * pInter;
+void printTowers(int * t1, int * t2, int * t3);
+void moveDisc(int n, int * from, int * to, int * intermediate); 
+void moveValues(int * from, int * to, int * intermediate);
 
 int main ()
 {
 
-    int *t1 = malloc(numberOfDisc*sizeof(int));
-    int *t2 = malloc(numberOfDisc*sizeof(int));
-    int *t3 = malloc(numberOfDisc*sizeof(int));    
-
-    int *p1;
-    int *p2;
-    int *p3; 
-    int *copia;
+    t1 = malloc(numberOfDisc*sizeof(int));
+    t2 = malloc(numberOfDisc*sizeof(int));
+    t3 = malloc(numberOfDisc*sizeof(int));    
 
     int x = numberOfDisc;
     int i = 0;
@@ -33,142 +36,109 @@ int main ()
          x--;
      }
 
-    p1 = &t1[numberOfDisc - 1];
-    p2 = &t2[0];
-    p3 = &t3[0];
+    printf("Original Tower\n");
+    printTowers(t1, t2, t3);
 
-    printf("p1: %d, p2: %d, p3: %d\n", *p1, *p2, *p3);
-
-    printTowers(t1, t2, t3, numberOfDisc);
-
-    moveDisc(numberOfDisc, t1, t3, t2, p1, p2, p3, copia, t1, t2, t3);    
-    printf("Number of moves: %d\n", instruction_count);
-
-    printTowers(t1, t2, t3, numberOfDisc);
-
-   
+    moveDisc(numberOfDisc, t1, t3, t2);       
     return 0;
 }
 
-void moveDisc(int n, int * from, int * to, int * intermediate, int * pFrom, int * pTo, int * pInter, int * copia, int * t1, int * t2, int * t3){
+void moveDisc(int n, int * from, int * to, int * intermediate){
     instruction_count++;
     int i = 0;
+    
     if(n == 1){  //break point   
-        printf("Fue igual a 1\n");
-        printf("Move disc %d from %c to %c \n" ,n, from, to);
-        pTo[0] = pFrom[0]; 
-        pFrom[0] = 0;
-
-        for(i = 0; i < numberOfDisc; i++){
-            if(to[i]==0 && i == 0){
-                pTo = &to[i];
-            } else if(to[i]==0){
-                pTo = &to[i-1];
-            } else {
-                pTo = &to[i];
-            }
-        }
-
-        for(i = 0; i < numberOfDisc; i++){
-            if(from[i]==0 && i == 0){
-                pFrom = &from[i];
-            } else if(to[i]==0){
-                pFrom = &from[i-1];
-            } else {
-                pFrom = &from[i];
-            }
-        }
-        /*
-        pTo[n] = pFrom[n];
-        rom[n] = 0;  */
-        printTowers(t1, t2, t3, numberOfDisc);      
+        x++;
+        printf("-----------Move#%d----------- \n", x);        
+        moveValues(from, to, intermediate);
+        printTowers(t1, t2, t3);                
+            
     }
     else{
-        copia = pInter;
-        pInter = pTo;
-        pTo = copia;
-        moveDisc(n-1,from,intermediate,to, pFrom, pTo, pInter, copia, t1, t2, t3);
-        printf("Move disc %d from %c to %c \n" ,n, from, to);
-        for(i = 0; i < numberOfDisc; i++){
-            if(to[i]==0 && i == 0){
-                pTo = &to[i];
-            } else if(to[i]==0){
-                pTo = &to[i-1];
-            } else {
-                pTo = &to[i];
-            }
-        }
-
-        for(i = 0; i < numberOfDisc; i++){
-            if(from[i]==0 && i == 0){
-                pFrom = &from[i];
-            } else if(to[i]==0){
-                pFrom = &from[i-1];
-            } else {
-                pFrom = &from[i];
-            }
-        }
-        printTowers(t1, t2, t3, numberOfDisc); 
-        copia = pFrom;
-        pFrom = pInter;
-        pInter = copia;
-        moveDisc(n-1,intermediate,to,from, pFrom, pTo, pInter, copia, t1, t2, t3); 
-        for(i = 0; i < numberOfDisc; i++){
-            if(to[i]==0 && i == 0){
-                pTo = &to[i];
-            } else if(to[i]==0){
-                pTo = &to[i-1];
-            } else {
-                pTo = &to[i];
-            }
-        }
-
-        for(i = 0; i < numberOfDisc; i++){
-            if(from[i]==0 && i == 0){
-                pFrom = &from[i];
-            } else if(to[i]==0){
-                pFrom = &from[i-1];
-            } else {
-                pFrom = &from[i];
-            }
-        }       
+        moveDisc(n-1,from,intermediate,to);  
+        x++;
+        printf("-----------Move#%d----------- \n", x);   
+        moveValues(from, to, intermediate);
+        printTowers(t1, t2, t3); 
+        moveDisc(n-1,intermediate,to,from);     
     }
-    
-    /*
-    
-    instruction_count++;
-    if(n == 1){  //break point   
-        printf("Fue igual a 1\n");
-        printf("Move disc %d from %c to %c \n" ,n, from, to);
-        t3[n] = t1[n];
-        t1[n] = 0;  
-        printTowers(t1, t2, t3, numberOfDisc);      
-    }
-    else{
-        moveDisc(n-1,from,intermediatte,to, t1, t2, t3);
-        printf("Move disc %d from %c to %c \n" ,n, from, to);
-        moveDisc(n-1,intermediatte,to,from, t1, t2, t3);
-        
-    }
-    */
 }
 
-void printTowers(int * t1, int * t2, int * t3, int n){
+void printTowers(int * t1, int * t2, int * t3){
     int i = 0;
 
     printf("Torre #1: ");
-    for(i = 0; i < n; i++){
+    for(i = 0; i < numberOfDisc; i++){
         printf("%d ", t1[i]);
     }
 
     printf("\nTorre #2: ");
-    for(i = 0; i < n; i++){
+    for(i = 0; i < numberOfDisc; i++){
         printf("%d ", t2[i]);
     }
 
     printf("\nTorre #3: ");
-    for(i = 0; i < n; i++){
+    for(i = 0; i < numberOfDisc; i++){
         printf("%d ", t3[i]);
     }
     printf("\n");
+}
+
+void moveValues(int * from, int * to, int * intermediate){
+    int i;
+    for(i = 0; i < numberOfDisc; i++){
+            if(to[i]==0 && i == 0){
+                pTo = &to[i];
+                break;
+            } else if(to[i]==0){
+                pTo = &to[i-1];
+                break;
+            } else if(i==numberOfDisc-1){
+                pTo = &to[i];
+            } else {
+                continue;
+            }
+        }
+
+        for(i = 0; i < numberOfDisc; i++){
+            if(from[i]==0 && i == 0){
+                pFrom = &from[i];
+                break;
+            } else if(from[i]==0){
+                pFrom = &from[i-1];
+                break;
+            } else if(i==numberOfDisc-1) {
+                pFrom = &from[i];
+            } else {
+                continue;
+            }          
+        }
+
+        for(i = 0; i < numberOfDisc; i++){
+            if(intermediate[i]==0 && i == 0){
+                pInter = &intermediate[i];
+                break;
+            } else if(intermediate[i]==0){
+                pInter = &intermediate[i-1];
+                break;
+            } else if(i==numberOfDisc-1) {
+                pInter = &intermediate[i];
+            } else {
+                continue;
+            }          
+        }
+
+        if(to[0] != 0){
+            pTo++;
+        } 
+
+        *pTo = *pFrom; 
+        *pFrom = 0; 
+        
+
+        if(pFrom == &from[0]){
+            pFrom == &from[0];
+        } else {
+            pFrom--;
+        }
 }
