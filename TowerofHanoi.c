@@ -1,3 +1,8 @@
+/*  Developers: Erik Bustos Montes de Oca
+                Bernardo Elizondo Hernández
+    Company:    ITESO
+*/
+
 #include <stdio.h>
 
 int instruction_count=0;
