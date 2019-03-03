@@ -5,7 +5,7 @@
 	
 .text 
 	main:
-	 	addi $s4, $zero, 4	# numberOfDiscs
+	 	addi $s4, $zero, 8	# numberOfDiscs
 	 	add $t0, $zero, $s4 	# n=numberOfDiscs
 	 	
 	 	addi $sp, $sp, -28
@@ -30,9 +30,9 @@
  		add $a3, $s7, $zero	#Base address of Tower3
  				
 		jal createFirstTower	
-        	addi $s1, $zero, 1
-	        addi $s2, $zero, 3
-        	addi $s3, $zero, 2
+        	addi $s1, $zero, 1 #	s1=1
+	        addi $s2, $zero, 3 #	s2=3
+        	addi $s3, $zero, 2 #	s3=2  to compare the instructions
         
 	        addi $sp, $sp, -32
         	sw $s4, 0($sp)
@@ -82,14 +82,9 @@
         bne $s4, $a0, else_ifmove	# if(n !=1) jump to else, if n==1 then do the next line	
         
         #if's para seleccionar el pointer indicado
-        jal moveValues    
+        jal moveValues
  	
- 	sw $zero, 0($sp)
- 	sw $zero, 4($sp)
- 	sw $zero, 8($sp)
- 	sw $zero, 12($sp)
  	lw $ra, 16($sp)
- 	sw $zero, 16($sp)  
  	
  	addi $sp, $sp, 32	        
         
@@ -119,12 +114,8 @@
         
         jal hanoi
         
-        sw $zero, 0($sp)
- 	sw $zero, 4($sp)
- 	sw $zero, 8($sp)
- 	sw $zero, 12($sp)
+
  	lw $ra, 16($sp)
- 	sw $zero, 16($sp)  
  	
  	addi $sp, $sp, 32
         
@@ -178,7 +169,7 @@
  	next:
  	
  	add $t4, $t3, $zero
- 	addi $t3, $zero, 0
+ 	addi $t3, $zero, 0 
  	
  	sw $t3, 0($t1)	#FROM
  	sw $t4, 0($t2)	#TO 
@@ -205,7 +196,7 @@
  	caseRF3:
  	bne $s1, $v1, caseRT1
  	add $s7, $t1, $zero
- 	j caseRT1
+ 	
  	
  	
  	caseRT1:
@@ -217,7 +208,7 @@
  	add $s6, $t2, $zero
  	j nothing
  	caseRT3:
- 	bne $s2, $v1, nothing
+ 	
  	add $s7, $t2, $zero
  	
  	
