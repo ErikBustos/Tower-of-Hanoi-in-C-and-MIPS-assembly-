@@ -5,8 +5,8 @@
 	
 .text 
 	main:
-	 	addi $s4, $zero, 8	# numberOfDiscs
-	 	add $t0, $zero, $s4 	# n=numberOfDiscs
+	 	addi $s0, $zero, 8	# numberOfDiscs
+	 	add $t0, $zero, $s0 	# n=numberOfDiscs
 	 	
 	 	addi $sp, $sp, -28
 
@@ -35,7 +35,7 @@
         	addi $s3, $zero, 2 #	s3=2  to compare the instructions
         
 	        addi $sp, $sp, -32
-        	sw $s4, 0($sp)
+        	sw $s0, 0($sp)
 	        sw $s1, 4($sp)
 	        sw $s2, 8($sp)
 	        sw $s3, 12($sp)
@@ -73,13 +73,12 @@
 
     hanoi:
         sw $ra, 16($sp)
-        lw $s4, 0($sp)
         lw $s1, 4($sp)
         lw $s2, 8($sp)
         lw $s3, 12($sp)
         
         
-        bne $s4, $a0, else_ifmove	# if(n !=1) jump to else, if n==1 then do the next line	
+        bne $s0, $a0, else_ifmove	# if(n !=1) jump to else, if n==1 then do the next line	
         
         #if's para seleccionar el pointer indicado
         jal moveValues
@@ -92,25 +91,24 @@
         
     else_ifmove:
     
-        addi $s4, $s4, -1        
+        addi $s0, $s0, -1        
         addi $sp, $sp, -32
-        sw $s4, 0($sp)
+        sw $s0, 0($sp)
         sw $s1, 4($sp)
         sw $s3, 8($sp)
         sw $s2, 12($sp)
-        sw $ra, 16($sp)
+        #sw $ra, 16($sp)
         
         jal hanoi
         
         jal moveValues
         
-        addi $s4, $s4, -1
+        addi $s0, $s0, -1
         addi $sp, $sp, -32
-        sw $s4, 0($sp)
         sw $s3, 4($sp)
         sw $s2, 8($sp)
         sw $s1, 12($sp)
-        sw $ra, 16($sp)
+        #sw $ra, 16($sp)
         
         jal hanoi
         
@@ -126,7 +124,7 @@
         #-----------------------------------------------------------------------------
         #Move Values
         moveValues:
-        lw $s4, 0($sp)
+        lw $s0, 0($sp)
         lw $s1, 4($sp)
         lw $s2, 8($sp)
         lw $s3, 12($sp)
@@ -141,7 +139,7 @@
         j caseTo
         
         caseF3:
-        bne $s1, $v1, caseTo
+        #bne $s1, $v1, caseTo
         add $t1, $s7, $zero
 
 
@@ -156,27 +154,26 @@
         add $t2, $s6, $zero
         j cont_moveValues
         caseT3:
-        bne $s2, $v1, cont_moveValues
+        #bne $s2, $v1, cont_moveValues
         add $t2, $s7, $zero
         
         cont_moveValues:
         lw $t3, 0($t1)	#FROM
  	lw $t4, 0($t2)	#TO 
         
-        beq $t4, $zero, next
+        beq $t4, $zero, next 	
  	addi $t2, $t2, 4
  	
  	next:
- 	
  	add $t4, $t3, $zero
- 	addi $t3, $zero, 0 
+ 	addi $t3, $zero, 0 #t3= 0
  	
  	sw $t3, 0($t1)	#FROM
  	sw $t4, 0($t2)	#TO 
  	
- 	beq $t1, $a1, next2	
- 	beq $t1, $a2, next2
- 	beq $t1, $a3, next2
+ 	#beq $t1, $a1, next2	
+ 	#beq $t1, $a2, next2
+	beq $t1, $a3, next2
  	addi $t1, $t1, -4
  	
  	next2:
